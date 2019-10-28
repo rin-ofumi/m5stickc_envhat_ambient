@@ -3,23 +3,35 @@ MicroPython project / ENV HAT &amp; M5StickC / Data storage uses Ambient
 
 <br>
 
-## １．概要
+# <概要>
 
 * M5StickCとENV HATを使って、気温・湿度・気圧を表示するプログラムです。
 * AmbientというIoTデータ可視化サービスを使って、記録を残すことも可能です。（無料枠で使えます）
 * MicroPythonで記述しています。（ファームウェアは UIFlow 1.4.1-beta を使用）
 
+この様な環境データグラフを取得出来るようになります。
+
+![Ambient_ENV_1](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/Ambient_env.png)
+
+こちらは2019年10月12日に日本に上陸して猛威を振るった台風19号通過時の気圧記録です。(単位は hPa )
+
+![Ambient_ENV_2](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/Ambient_Press_2.png)
+
+台風の目付近が通過した際の低気圧のピークが記録されています。
+
+![Ambient_ENV_3](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/Ambient_Press_1.png)
+
 <br>
 
-## ２．実行に必要なファイル
+# <実行に必要なファイル>
 
-### Ambientライブラリ「ambient.py」※オプション
+## Ambientライブラリ「ambient.py」※オプション
 Ambientへのデータ送信（記録）を使う場合は、[こちら](https://github.com/AmbientDataInc/ambient-python-lib)のライブラリが必要です。<br>
 「ambient.py」をM5StickCのルートに保存して下さい。<br>
 
 <br>
 
-### NTP時刻同期ライブラリ「ntptime.py」**※必須**
+## NTP時刻同期ライブラリ「ntptime.py」**※必須**
 NTP時刻同期機能は、[こちら](https://github.com/micropython/micropython/blob/master/ports/esp8266/modules/ntptime.py)のライブラリを使っています。<br>
 「ntptime.py」をダウンロードし、下記部分を修正して下さい。（日本時間へ設定を変える為）<br>
 
@@ -37,12 +49,12 @@ NTP_DELTA = 3155673600 - (9*60*60)
 
 <br>
 
-### 当プログラム本体「test_ENV_Ambient.py」**※必須**
+## 当プログラム本体「test_ENV_Ambient.py」**※必須**
 M5StickCのプログラム選択モード「APP.List」から起動させる場合は、「test_ENV_Ambient.py」をM5StickCの「Apps」配下に保存して下さい。<br>
 
 <br>
 
-### Ambientの設定ファイル「am_set.txt」※オプション
+## Ambientの設定ファイル「am_set.txt」※オプション
 Ambientを使う場合は、「am_set.txt」の修正が必要です。<br>
 「チャネルID」を「AM_ID:」以降に、「ライトキー」を「AM_WKEY:」以降に追記して下さい。<br>
 ※空白文字、"などは含まない様にして下さい<br>
@@ -52,9 +64,9 @@ Ambientを使う場合は、「am_set.txt」の修正が必要です。<br>
 
 <br>
 
-## ３．使い方
+# <使い方>
 
-### 基本動作
+## 基本動作
 
 - プログラム起動させると、M5StickCの画面に時刻・気温・湿度・気圧が表示されます。
 - 300秒毎（5分毎）にAmbientへ気温・湿度・気圧データを送信しています。
@@ -62,13 +74,17 @@ Ambientを使う場合は、「am_set.txt」の修正が必要です。<br>
 
 <br>
 
-### ボタン操作
+## ボタン操作
 
 - M5StickCのAボタン（M5ロゴの有るボタン）を押すと画面消灯します。もう一度押すと画面点灯します。
 - M5StickCのBボタン（電源ボタンじゃない方の側面ボタン）を押すと表示が180度回転しますので、設置向きに合わせてお選び下さい。
 
+![M5StickC_1](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/P1180694-800x600.jpg)
+
+![M5StickC_2](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/P1180695-800x600.jpg)
+
 <br>
 
-## ４．参考ページ
+# <参考ページ>
 その他の情報については[ブログ](https://kitto-yakudatsu.com/archives/7143)をご参照下さい。<br>
 ※当プログラムは、ブログ記載時より若干バージョンアップしています。<br>
