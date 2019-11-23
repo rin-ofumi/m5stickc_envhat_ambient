@@ -53,9 +53,9 @@ def buttonA_wasPressed():
         lcd_mute = True
 
     if lcd_mute == True :
-        axp.setLDO2Vol(0)   #バックライト輝度調整（OFF）
+        axp.setLDO2Volt(0)   #バックライト輝度調整（OFF）
     else :
-        axp.setLDO2Vol(2.7) #バックライト輝度調整（中くらい）
+        axp.setLDO2Volt(2.7) #バックライト輝度調整（中くらい）
 
 
 # 表示切替ボタン処理スレッド関数
@@ -152,7 +152,7 @@ wifiCfg.autoConnect(lcdShow=True)
 
 
 # 画面初期化
-axp.setLDO2Vol(2.7) #バックライト輝度調整（中くらい）
+axp.setLDO2Volt(2.7) #バックライト輝度調整（中くらい）
 draw_lcd()
 
 

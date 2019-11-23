@@ -7,7 +7,7 @@ MicroPython project / ENV HAT &amp; M5StickC / Data storage uses Ambient
 
 * M5StickCとENV HATを使って、気温・湿度・気圧を表示するプログラムです。
 * AmbientというIoTデータ可視化サービスを使って、記録を残すことも可能です。（無料枠で使えます）
-* MicroPythonで記述しています。（ファームウェアは UIFlow 1.4.1-beta を使用）
+* MicroPythonで記述しています。（ファームウェアは UIFlow-v1.4.2 を使用。これより古いファームでは関数名が変わってるので動きません。）
 
 この様な環境データグラフを取得出来るようになります。
 
@@ -88,3 +88,18 @@ Ambientを使う場合は、「am_set.txt」の修正が必要です。<br>
 # <参考ページ>
 その他の情報については[ブログ](https://kitto-yakudatsu.com/archives/7143)をご参照下さい。<br>
 ※当プログラムは、ブログ記載時より若干バージョンアップしています。<br>
+
+<br>
+
+# <アップデート履歴>
+
+## 【2019.11.23】
+
+* UIFlow-v1.4.2 ファームへの対応
+
+<br>
+
+## 【2019.10.28】
+
+* 最初のリリース
+
