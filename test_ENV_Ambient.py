@@ -20,6 +20,17 @@ Env_H               = ''
 Env_P               = ''
 
 
+# @cinimlさんのファーム差分吸収ロジック
+class AXPCompat(object):
+    def __init__(self):
+        if( hasattr(axp, 'setLDO2Vol') ):
+            self.setLDO2Vol = axp.setLDO2Vol
+        else:
+            self.setLDO2Vol = axp.setLDO2Volt
+
+axp = AXPCompat()
+
+
 # 時計表示スレッド関数
 def time_count ():
     global Disp_mode
@@ -53,9 +64,9 @@ def buttonA_wasPressed():
         lcd_mute = True
 
     if lcd_mute == True :
-        axp.setLDO2Volt(0)   #バックライト輝度調整（OFF）
+        axp.setLDO2Vol(0)   #バックライト輝度調整（OFF）
     else :
-        axp.setLDO2Volt(2.7) #バックライト輝度調整（中くらい）
+        axp.setLDO2Vol(2.7) #バックライト輝度調整（中くらい）
 
 
 # 表示切替ボタン処理スレッド関数
@@ -130,16 +141,11 @@ def am_set_filechk():
                     AM_ID = str(filetxt[1])
                     print('- AM_ID: ' + str(AM_ID))
                 elif filetxt[0] == 'AM_WKEY' :
-                    AM_WKEY = str(filetxt[1])
-                    print('- AM_WKEY: ' + str(AM_WKEY))
+                    if len(filetxt[1]) == 16 :
+                        AM_WKEY = str(filetxt[1])
+                        print('- AM_WKEY: ' + str(AM_WKEY))
     else :
         print('>> no [am_set.txt] !')
-    
-    if (not len(AM_ID) == 5) and (not len(AM_WKEY) == 16) :
-        print('>> [am_set.txt] Illegal!!')
-        AM_ID = None
-        AM_WKEY = None
-
     return scanfile_flg
 
 
@@ -152,7 +158,7 @@ wifiCfg.autoConnect(lcdShow=True)
 
 
 # 画面初期化
-axp.setLDO2Volt(2.7) #バックライト輝度調整（中くらい）
+axp.setLDO2Vol(2.7) #バックライト輝度調整（中くらい）
 draw_lcd()
 
 
@@ -168,8 +174,6 @@ am_set_filechk()
 if (AM_ID is not None) and (AM_WKEY is not None) : # Ambient設定情報があった場合
     import ambient
     am_env = ambient.Ambient(AM_ID, AM_WKEY)
-else :
-    Am_err = 1
 
 
 # RTC設定
