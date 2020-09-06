@@ -7,7 +7,7 @@ MicroPython project / ENV HAT &amp; M5StickC / Data storage uses Ambient
 
 * M5StickCとENV HATを使って、気温・湿度・気圧を表示するプログラムです。
 * AmbientというIoTデータ可視化サービスを使って、記録を残すことも可能です。（無料枠で使えます）
-* MicroPythonで記述しています。（ファームウェアは UIFlow-v1.4.2 を使用）
+* MicroPythonで記述しています。（ファームウェアは UIFlow-v1.6.2 を使用）
 
 この様な環境データグラフを取得出来るようになります。
 
@@ -28,28 +28,12 @@ MicroPython project / ENV HAT &amp; M5StickC / Data storage uses Ambient
 ## Ambientライブラリ「ambient.py」※オプション
 Ambientへのデータ送信（記録）を使う場合は、[こちら](https://github.com/AmbientDataInc/ambient-python-lib)のライブラリが必要です。<br>
 「ambient.py」をM5StickCのルートに保存して下さい。<br>
-
-<br>
-
-## NTP時刻同期ライブラリ「ntptime.py」**※必須**
-NTP時刻同期機能は、[こちら](https://github.com/micropython/micropython/blob/master/ports/esp8266/modules/ntptime.py)のライブラリを使っています。<br>
-「ntptime.py」をダウンロードし、下記部分を修正して下さい。（日本時間へ設定を変える為）<br>
-
-```python
-NTP_DELTA = 3155673600
-```
-
-↓<br>
-
-```python
-NTP_DELTA = 3155673600 - (9*60*60)
-```
-
-修正したら「ntptime.py」をM5StickCのルートに保存して下さい。<br>
+※【2020.9.6】最新のAmbient.pyライブラリだと送信エラーになる症状が報告されています。エラーになる場合は、[Mar 17.2018版](https://github.com/AmbientDataInc/ambient-python-lib/tree/751afc4ad2ac5b6d37f236c5660e010a53cf670f)でお試し下さい。<br>
 
 <br>
 
 ## 当プログラム本体「test_ENV_Ambient.py」**※必須**
+M5StickC・M5StickCPlus用です。（プログラム内で機種自動判別させてます）<br>
 M5StickCのプログラム選択モード「APP.List」から起動させる場合は、「test_ENV_Ambient.py」をM5StickCの「Apps」配下に保存して下さい。<br>
 
 <br>
@@ -74,14 +58,30 @@ Ambientを使う場合は、「am_set.txt」の修正が必要です。<br>
 
 <br>
 
+「M5StickC」の表示例
+![M5StickC_1](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/P1230603-scaled.jpg)
+
+<br>
+
+「M5StickC Plus」の表示例
+![M5StickC_2](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/P1230602-scaled.jpg)
+
+<br>
+
+※「ENV HAT」をそのまま「M5StickC」に装着するとやや温度が高めに表示されます。（本体側の熱を拾ってる模様）<br>
+写真では、当方がBOOTHで販売している[「Pin Header HAT」](https://kitto-yakudatsu.booth.pm/items/1701285)を間に挟んで対策しています。<br>
+他にも色々便利商品並べてますので、是非[ショップページ](https://kitto-yakudatsu.booth.pm/)も覗いてみて下さいませ。<br>
+
+<br>
+
 ## ボタン操作
 
 - M5StickCのAボタン（M5ロゴの有るボタン）を押すと画面消灯します。もう一度押すと画面点灯します。
 - M5StickCのBボタン（電源ボタンじゃない方の側面ボタン）を押すと表示が180度回転しますので、設置向きに合わせてお選び下さい。
 
-![M5StickC_1](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/P1180694-800x600.jpg)
+![M5StickC_3](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/P1180694-800x600.jpg)
 
-![M5StickC_2](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/P1180695-800x600.jpg)
+![M5StickC_4](https://kitto-yakudatsu.com/wp/wp-content/uploads/2019/10/P1180695-800x600.jpg)
 
 <br>
 
@@ -92,6 +92,15 @@ Ambientを使う場合は、「am_set.txt」の修正が必要です。<br>
 <br>
 
 # <アップデート履歴>
+
+## 【2020.09.06】 [test_ENV_Ambient.py] Update!
+
+* UIFlow-v1.6.2 ファームへの対応。（公式同梱になったntptimeモジュールに合わせた修正）
+* M5StickCPlus対応（M5StickC版と同じソースコードで動作します）
+* その他バグFix。
+* ファイル毎の改行コード混在の是正。（LFに統一しました）
+
+<br>
 
 ## 【2019.12.14】 [test_ENV_Ambient.py] Update!
 

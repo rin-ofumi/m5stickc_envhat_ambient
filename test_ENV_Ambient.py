@@ -12,6 +12,7 @@ import ntptime
 Am_err              = 1     # グローバル
 Disp_mode           = 0     # グローバル
 lcd_mute            = False # グローバル
+m5type              = 0     # グローバル [0:M5StickC、1: M5StickCPlus]
 am_interval         = 300   # Ambientへデータを送るサイクル（秒）
 AM_ID               = None
 AM_WKEY             = None
@@ -32,8 +33,8 @@ axp = AXPCompat()
 
 
 # 時計表示スレッド関数
-def time_count ():
-    global Disp_mode
+def time_count():
+    global Disp_mode , m5type
     global Am_err
     
     while True:
@@ -43,15 +44,25 @@ def time_count ():
             fc = lcd.RED
 
         if Disp_mode == 1 : # 表示回転処理
-            lcd.rect(67, 0, 80, 160, lcd.BLACK, lcd.BLACK)
-            lcd.font(lcd.FONT_DefaultSmall, rotate = 90)
-            lcd.print('{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}'.format(*time.localtime()[:6]), 78, 40, fc)
+            if m5type == 0 :
+                lcd.rect(67, 0, 80, 160, lcd.BLACK, lcd.BLACK)
+                lcd.font(lcd.FONT_DefaultSmall, rotate = 90)
+                lcd.print('{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}'.format(*utime.localtime()[:6]), 78, 40, fc)
+            if m5type == 1 :
+                lcd.rect(113, 0, 135, 240, lcd.BLACK, lcd.BLACK)
+                lcd.font(lcd.FONT_DejaVu18, rotate = 90)
+                lcd.print('{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}'.format(*utime.localtime()[:6]), 131, 30, fc)
         else :
-            lcd.rect(0 , 0, 13, 160, lcd.BLACK, lcd.BLACK)
-            lcd.font(lcd.FONT_DefaultSmall, rotate = 270)
-            lcd.print('{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}'.format(*time.localtime()[:6]), 2, 125, fc)
+            if m5type == 0 :
+                lcd.rect(0 , 0, 13, 160, lcd.BLACK, lcd.BLACK)
+                lcd.font(lcd.FONT_DefaultSmall, rotate = 270)
+                lcd.print('{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}'.format(*utime.localtime()[:6]), 2, 125, fc)
+            if m5type == 1 :
+                lcd.rect(0 , 0, 20, 240, lcd.BLACK, lcd.BLACK)
+                lcd.font(lcd.FONT_DejaVu18, rotate = 270)
+                lcd.print('{}-{:02d}-{:02d} {:02d}:{:02d}:{:02d}'.format(*utime.localtime()[:6]), 4, 210, fc)
 		
-        utime.sleep(1)
+        utime.sleep(0.5)
 
 
 # 表示OFFボタン処理スレッド関数
@@ -83,21 +94,27 @@ def buttonB_wasPressed():
 
 # 表示モード切替時の枠描画処理関数
 def draw_lcd():
-    global Disp_mode
+    global Disp_mode , m5type
 
     lcd.clear()
 
     if Disp_mode == 1 :
-        lcd.line(66, 0, 66, 160, lcd.LIGHTGREY)
+        if m5type == 0 :
+            lcd.line(66, 0, 66, 160, lcd.LIGHTGREY)
+        if m5type == 1 :
+            lcd.line(112, 0, 112, 240, lcd.LIGHTGREY)
     else :
-        lcd.line(14, 0, 14, 160, lcd.LIGHTGREY)
+        if m5type == 0 :
+            lcd.line(14, 0, 14, 160, lcd.LIGHTGREY)
+        if m5type == 1 :
+            lcd.line(23, 0, 23, 240, lcd.LIGHTGREY)
 
     draw_env()
 
 
 # 値表示処理関数
 def draw_env():
-    global Disp_mode
+    global Disp_mode , m5type
     global lcd_mute
     global Env_T
     global Env_H
@@ -109,17 +126,31 @@ def draw_env():
         fc = lcd.WHITE
 	
     if Disp_mode == 1 : # 表示回転処理
-        lcd.rect(0, 0, 65, 160, lcd.BLACK, lcd.BLACK)
-        lcd.font(lcd.FONT_Default, rotate = 90)
-        lcd.print(Env_T + ' C', 58, 120 - int((len(Env_T + ' C')* 18)/2), fc)
-        lcd.print(Env_H + ' %', 38, 120 - int((len(Env_H + ' %')* 18)/2), fc)
-        lcd.print(Env_P + ' hPa', 18, 138 - int((len(Env_P + ' hPa')* 18)/2), fc)
+        if m5type == 0 :
+            lcd.rect(0, 0, 65, 160, lcd.BLACK, lcd.BLACK)
+            lcd.font(lcd.FONT_Default, rotate = 90)
+            lcd.print(Env_T + ' C', 58, 120 - int((len(Env_T + ' C')* 18)/2), fc)
+            lcd.print(Env_H + ' %', 38, 120 - int((len(Env_H + ' %')* 18)/2), fc)
+            lcd.print(Env_P + ' hPa', 18, 138 - int((len(Env_P + ' hPa')* 18)/2), fc)
+        if m5type == 1 :
+            lcd.rect(0, 0, 111, 240, lcd.BLACK, lcd.BLACK)
+            lcd.font(lcd.FONT_DejaVu18, rotate = 90)
+            lcd.print(Env_T + ' C', 95, 160 - int((len(Env_T + ' C')* 18)/2), fc)
+            lcd.print(Env_H + ' %', 65, 160 - int((len(Env_H + ' %')* 18)/2), fc)
+            lcd.print(Env_P + ' hPa', 35, 160 - int((len(Env_P + ' hPa')* 18)/2), fc)
     else :
-        lcd.rect(15 , 0, 80, 160, lcd.BLACK, lcd.BLACK)
-        lcd.font(lcd.FONT_Default, rotate = 270)
-        lcd.print(Env_T + ' C', 22, 40 + int((len(Env_T + ' C')* 18)/2), fc)
-        lcd.print(Env_H + ' %', 42, 40 + int((len(Env_H + ' %')* 18)/2), fc)
-        lcd.print(Env_P + ' hPa', 62, 22 + int((len(Env_P + ' hPa')* 18)/2), fc)
+        if m5type == 0 :
+            lcd.rect(15 , 0, 80, 160, lcd.BLACK, lcd.BLACK)
+            lcd.font(lcd.FONT_Default, rotate = 270)
+            lcd.print(Env_T + ' C', 22, 40 + int((len(Env_T + ' C')* 18)/2), fc)
+            lcd.print(Env_H + ' %', 42, 40 + int((len(Env_H + ' %')* 18)/2), fc)
+            lcd.print(Env_P + ' hPa', 62, 22 + int((len(Env_P + ' hPa')* 18)/2), fc)
+        if m5type == 1 :
+            lcd.rect(24 , 0, 135, 240, lcd.BLACK, lcd.BLACK)
+            lcd.font(lcd.FONT_DejaVu18, rotate = 270)
+            lcd.print(Env_T + ' C', 40, 80 + int((len(Env_T + ' C')* 18)/2), fc)
+            lcd.print(Env_H + ' %', 70, 80 + int((len(Env_H + ' %')* 18)/2), fc)
+            lcd.print(Env_P + ' hPa', 100, 80 + int((len(Env_P + ' hPa')* 18)/2), fc)
 
 
 # am_set.txtの存在/中身チェック関数
@@ -159,11 +190,15 @@ wifiCfg.autoConnect(lcdShow=True)
 
 # 画面初期化
 axp.setLDO2Vol(2.7) #バックライト輝度調整（中くらい）
+
+if lcd.winsize() == (80,160) :  # M5StickC/Plus機種判定
+    m5type = 0
+    print('>> M5Type = M5StickC')
+if lcd.winsize() == (136,241) :
+    m5type = 1
+    print('>> M5Type = M5StickCPlus')
+
 draw_lcd()
-
-
-# ENV HAT設定
-hat_env0 = hat.get(hat.ENV)
 
 
 # ユーザー設定ファイル読み込み
@@ -177,11 +212,11 @@ if (AM_ID is not None) and (AM_WKEY is not None) : # Ambient設定情報があ�
 
 
 # RTC設定
-utime.localtime(ntptime.settime())
+ntp = ntptime.client(host='jp.pool.ntp.org', timezone=9)
 
 
 # 時刻表示スレッド起動
-_thread.start_new_thread(time_count , ())
+_thread.start_new_thread(time_count, ())
 
 
 # ボタン検出スレッド起動
@@ -191,6 +226,11 @@ btnB.wasPressed(buttonB_wasPressed)
 
 # タイムカウンタ初期値設定
 am_tc = utime.time()
+
+
+# ENV HAT設定
+hat_env0 = hat.get(hat.ENV)
+utime.sleep(1)
 
 
 # メインルーチン
